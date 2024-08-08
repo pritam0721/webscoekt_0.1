@@ -31,5 +31,5 @@ websocket.on("request", request => {
 function sendevery5seconds(connection){
 
     connection.send(`Message ${Math.random()}`);
-    setTimeout(sendevery5seconds, 5000);
+    setTimeout(()=>sendevery5seconds(connection), 5000);
 }
