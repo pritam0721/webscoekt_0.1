@@ -1,4 +1,7 @@
 const http = require('node:http');
+
+// ! express servser
+
 const app = require('express')();
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -6,17 +9,31 @@ app.get('/', (req, res) => {
 app.listen(9091, () => {
   console.log('express app listening on port:9091');
 });
+
+// ****************************************
+
+// ! This the websocket code on 9090
+
 const websocketServer = require('websocket').server;
 const httpServer = http.createServer();
 httpServer.listen(9090, () => console.log('I am listtening on port:9090'));
 
 //hasmap for the clients
+
 const clients = {};
 const games = {};
+
+// *************************************
+
 const wsServer = new websocketServer({
   httpServer: httpServer,
 });
+
+// ************************
+
 wsServer.on('request', (request) => {
+  // ! creating firt connection string
+
   const connection = request.accept(null, request.origin);
   connection.on('open', () => console.log('connection is open'));
   connection.on('close', () => console.log('connection is closed'));
@@ -86,9 +103,12 @@ wsServer.on('request', (request) => {
   connection.send(JSON.stringify(payLoad));
 });
 
+// * this the gloabla user id creaation method you can go around make another 
+
 function S4() {
   return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 }
+// ! this is the end of the   : wsServer.on('request', (request) => {})
 
 // then to call it, plus stitch in '4' in the third group
 const guid = () =>
